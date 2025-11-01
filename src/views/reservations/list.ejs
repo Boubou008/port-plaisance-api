@@ -1,0 +1,18 @@
+<% layout('layout') -%>
+<h2>Réservations</h2>
+<p><a class="btn" href="/reservations/new">Créer une réservation</a></p>
+<table>
+  <thead><tr><th>Catway</th><th>Client</th><th>Bateau</th><th>Début</th><th>Fin</th><th></th></tr></thead>
+  <tbody>
+    <% resas.forEach(r => { %>
+      <tr>
+        <td><%= r.catwayNumber %></td>
+        <td><%= r.clientName %></td>
+        <td><%= r.boatName %></td>
+        <td><%= new Date(r.startDate).toLocaleString('fr-FR') %></td>
+        <td><%= new Date(r.endDate).toLocaleString('fr-FR') %></td>
+        <td><a class="btn" href="/reservations/<%= r._id %>">Détails</a></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>

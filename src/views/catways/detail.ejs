@@ -1,0 +1,12 @@
+<% layout('layout') -%>
+<h2>Catway #<%= catway.catwayNumber %></h2>
+<p>Type : <strong><%= catway.catwayType %></strong></p>
+<form method="post" action="/catways/<%= catway.catwayNumber %>/state">
+  <label>État
+    <input name="catwayState" value="<%= catway.catwayState %>" />
+  </label>
+  <button type="submit">Mettre à jour l'état</button>
+</form>
+<form method="post" action="/catways/<%= catway.catwayNumber %>/delete" onsubmit="return confirm('Supprimer ce catway ?')">
+  <button class="danger" type="submit">Supprimer</button>
+</form>

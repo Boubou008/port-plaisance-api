@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %> · Port de Russell</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container">
+      <h1>Port de Russell</h1>
+      <nav>
+        <% if (session && session.user) { %>
+          <a href="/dashboard">Tableau de bord</a>
+          <a href="/catways">Catways</a>
+          <a href="/reservations">Réservations</a>
+          <a href="/users">Utilisateurs</a>
+          <a href="/docs" target="_blank">Doc API</a>
+          <a href="/dashboard/logout">Déconnexion</a>
+        <% } else { %>
+          <a href="/">Accueil</a>
+          <a href="/docs" target="_blank">Doc API</a>
+        <% } %>
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+    <%- body %>
+  </main>
+  <footer class="footer container">
+    <small>© <%= new Date().getFullYear() %> Port de Russell — Devoir API</small>
+  </footer>
+</body>
+</html>

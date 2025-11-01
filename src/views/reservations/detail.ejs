@@ -1,0 +1,13 @@
+<% layout('layout') -%>
+<h2>Réservation</h2>
+<form method="post" action="/reservations/<%= resa._id %>/update">
+  <label>Catway # <input value="<%= resa.catwayNumber %>" disabled /></label>
+  <label>Client <input name="clientName" value="<%= resa.clientName %>" required /></label>
+  <label>Bateau <input name="boatName" value="<%= resa.boatName %>" required /></label>
+  <label>Début <input type="datetime-local" name="startDate" value="<%= new Date(resa.startDate).toISOString().slice(0,16) %>" required /></label>
+  <label>Fin <input type="datetime-local" name="endDate" value="<%= new Date(resa.endDate).toISOString().slice(0,16) %>" required /></label>
+  <button type="submit">Mettre à jour</button>
+</form>
+<form method="post" action="/reservations/<%= resa._id %>/delete" onsubmit="return confirm('Supprimer cette réservation ?')">
+  <button class="danger" type="submit">Supprimer</button>
+</form>

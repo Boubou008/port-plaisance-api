@@ -1,0 +1,1 @@
+console.log('Swagger statique: swagger/openapi.yaml déjà prêt.');

@@ -1,0 +1,260 @@
+openapi: 3.0.3
+info:
+  title: API privée - Port de Russell
+  version: 1.0.0
+  description: |
+    API REST pour la gestion des catways, réservations et utilisateurs.
+    Authentification par session (utiliser /api/login avant d'appeler les routes protégées côté web).
+
+servers:
+  - url: /api
+
+paths:
+  /login:
+    post:
+      summary: Connexion (création de session)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+      responses:
+        "200": { description: Connecté }
+        "401": { description: Identifiants invalides }
+
+  /logout:
+    get:
+      summary: Déconnexion
+      responses:
+        "200": { description: Déconnecté }
+
+  /users:
+    get:
+      summary: Lister les utilisateurs
+      responses:
+        "200":
+          description: Liste des utilisateurs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Créer un utilisateur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        "201": { description: Créé }
+        "409": { description: Conflit (email existant) }
+
+  /users/{email}:
+    get:
+      summary: Détails utilisateur par email
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema: { type: string, format: email }
+      responses:
+        "200": { description: OK }
+        "404": { description: Introuvable }
+    put:
+      summary: Modifier un utilisateur
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema: { type: string, format: email }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username: { type: string }
+      responses:
+        "200": { description: OK }
+        "404": { description: Introuvable }
+    delete:
+      summary: Supprimer un utilisateur
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema: { type: string, format: email }
+      responses:
+        "200": { description: Supprimé }
+        "404": { description: Introuvable }
+
+  /catways:
+    get:
+      summary: Lister les catways
+      responses:
+        "200":
+          description: Liste
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Catway' }
+    post:
+      summary: Créer un catway
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CatwayCreate' }
+      responses:
+        "201": { description: Créé }
+        "409": { description: Conflit (numéro existant) }
+
+  /catways/{id}:
+    get:
+      summary: Détails d'un catway
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: OK }
+        "404": { description: Introuvable }
+    put:
+      summary: Mettre à jour l'état d'un catway
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                catwayState: { type: string }
+      responses:
+        "200": { description: OK }
+        "404": { description: Introuvable }
+    delete:
+      summary: Supprimer un catway (+ réservations associées)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: Supprimé }
+        "404": { description: Introuvable }
+
+  /catways/{id}/reservations:
+    get:
+      summary: Lister les réservations d'un catway
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: OK }
+    post:
+      summary: Créer une réservation pour un catway
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ReservationCreate' }
+      responses:
+        "201": { description: Créé }
+        "409": { description: Conflit (chevauchement) }
+    put:
+      summary: Modifier une réservation (id dans le body _id)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/ReservationCreate'
+                - type: object
+                  properties:
+                    _id: { type: string }
+      responses:
+        "200": { description: OK }
+        "404": { description: Introuvable }
+
+  /catways/{id}/reservations/{idReservation}:
+    get:
+      summary: Détails d'une réservation précise d'un catway
+      parameters:
+        - { name: id, in: path, schema: { type: integer }, required: true }
+        - { name: idReservation, in: path, schema: { type: string }, required: true }
+      responses:
+        "200": { description: OK }
+        "404": { description: Introuvable }
+    delete:
+      summary: Supprimer une réservation
+      parameters:
+        - { name: id, in: path, schema: { type: integer }, required: true }
+        - { name: idReservation, in: path, schema: { type: string }, required: true }
+      responses:
+        "200": { description: Supprimée }
+        "404": { description: Introuvable }
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id: { type: string }
+        username: { type: string }
+        email: { type: string, format: email }
+    UserCreate:
+      type: object
+      required: [username, email, password]
+      properties:
+        username: { type: string }
+        email: { type: string, format: email }
+        password: { type: string, minLength: 8 }
+    Catway:
+      type: object
+      properties:
+        catwayNumber: { type: integer }
+        catwayType: { type: string, enum: [long, short] }
+        catwayState: { type: string }
+    CatwayCreate:
+      type: object
+      required: [catwayNumber, catwayType]
+      properties:
+        catwayNumber: { type: integer }
+        catwayType: { type: string, enum: [long, short] }
+        catwayState: { type: string }
+    ReservationCreate:
+      type: object
+      required: [clientName, boatName, startDate, endDate]
+      properties:
+        clientName: { type: string }
+        boatName: { type: string }
+        startDate: { type: string, format: date-time }
+        endDate: { type: string, format: date-time }

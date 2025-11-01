@@ -1,0 +1,16 @@
+<% layout('layout') -%>
+<h2>Catways</h2>
+<p><a class="btn" href="/catways/new">Créer un catway</a></p>
+<table>
+  <thead><tr><th>#</th><th>Type</th><th>État</th><th></th></tr></thead>
+  <tbody>
+    <% catways.forEach(c => { %>
+      <tr>
+        <td><%= c.catwayNumber %></td>
+        <td><%= c.catwayType %></td>
+        <td><%= c.catwayState %></td>
+        <td><a class="btn" href="/catways/<%= c.catwayNumber %>">Détails</a></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>

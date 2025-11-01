@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  mongo:
+    image: mongo:7
+    container_name: mongo_port_russell
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  app:
+    build: .
+    container_name: port_russell_app
+    depends_on:
+      - mongo
+    ports:
+      - "3000:3000"
+    environment:
+      # Adapte si tu veux une autre BDD / credentials
+      MONGODB_URI: "mongodb://mongo:27017/port_russell"
+      SESSION_SECRET: "change-me"
+      ADMIN_EMAIL: "admin@port.fr"
+      ADMIN_USERNAME: "Capitaine"
+      ADMIN_PASSWORD: "Passw0rd!"
+
+volumes:
+  mongo_data:

@@ -1,0 +1,14 @@
+<% layout('layout') -%>
+<h2>Nouveau catway</h2>
+<% if (typeof error !== 'undefined') { %><p class="error"><%= error %></p><% } %>
+<form method="post">
+  <label>Numéro <input name="catwayNumber" type="number" required /></label>
+  <label>Type
+    <select name="catwayType" required>
+      <option value="short">short</option>
+      <option value="long">long</option>
+    </select>
+  </label>
+  <label>État <input name="catwayState" /></label>
+  <button type="submit">Créer</button>
+</form>

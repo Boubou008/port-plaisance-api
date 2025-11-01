@@ -1,0 +1,32 @@
+<% layout('layout') -%>
+<h2>Tableau de bord</h2>
+<div class="grid">
+  <div class="card">
+    <h3>Utilisateur connecté</h3>
+    <p><strong><%= session.user.username %></strong><br /> <%= session.user.email %></p>
+  </div>
+  <div class="card">
+    <h3>Date du jour</h3>
+    <p><%= new Date(today).toLocaleDateString('fr-FR') %></p>
+  </div>
+</div>
+<section class="card">
+  <h3>Réservations en cours</h3>
+  <table>
+    <thead><tr><th>Catway #</th><th>Client</th><th>Bateau</th><th>Début</th><th>Fin</th></tr></thead>
+    <tbody>
+      <% inProgress.forEach(r => { %>
+        <tr>
+          <td><%= r.catwayNumber %></td>
+          <td><%= r.clientName %></td>
+          <td><%= r.boatName %></td>
+          <td><%= new Date(r.startDate).toLocaleDateString('fr-FR') %></td>
+          <td><%= new Date(r.endDate).toLocaleDateString('fr-FR') %></td>
+        </tr>
+      <% }) %>
+      <% if (inProgress.length === 0) { %>
+        <tr><td colspan="5">Aucune réservation en cours.</td></tr>
+      <% } %>
+    </tbody>
+  </table>
+</section>

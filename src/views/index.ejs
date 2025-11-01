@@ -1,0 +1,22 @@
+<% layout('layout') -%>
+<section class="hero">
+  <h2>Gestion des réservations de catway</h2>
+  <p>Bienvenue sur l'application interne de la capitainerie du port de Russell. Connectez‑vous pour accéder au tableau de bord.</p>
+</section>
+
+<section class="card">
+  <h3>Connexion</h3>
+  <% if (typeof error !== 'undefined') { %>
+    <p class="error"><%= error %></p>
+  <% } %>
+  <form method="post" action="/login">
+    <label>Email
+      <input type="email" name="email" required />
+    </label>
+    <label>Mot de passe
+      <input type="password" name="password" required />
+    </label>
+    <button type="submit">Se connecter</button>
+  </form>
+  <p><a href="/docs" target="_blank">Voir la documentation de l’API</a></p>
+</section>

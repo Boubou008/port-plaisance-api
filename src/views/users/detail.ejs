@@ -1,0 +1,10 @@
+<% layout('layout') -%>
+<h2>Utilisateur</h2>
+<form method="post" action="/users/<%= user._id %>/update">
+  <label>Nom d'utilisateur <input name="username" value="<%= user.username %>" required /></label>
+  <label>Email <input value="<%= user.email %>" disabled /></label>
+  <button type="submit">Mettre à jour</button>
+</form>
+<form method="post" action="/users/<%= user._id %>/delete" onsubmit="return confirm('Supprimer cet utilisateur ?')">
+  <button class="danger" type="submit">Supprimer</button>
+</form>

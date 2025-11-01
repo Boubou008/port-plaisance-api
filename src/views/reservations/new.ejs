@@ -1,0 +1,17 @@
+<% layout('layout') -%>
+<h2>Nouvelle réservation</h2>
+<% if (typeof error !== 'undefined') { %><p class="error"><%= error %></p><% } %>
+<form method="post">
+  <label>Catway
+    <select name="catwayNumber" required>
+      <% catways.forEach(c => { %>
+        <option value="<%= c.catwayNumber %>"><%= c.catwayNumber %> (<%= c.catwayType %>)</option>
+      <% }) %>
+    </select>
+  </label>
+  <label>Client <input name="clientName" required /></label>
+  <label>Bateau <input name="boatName" required /></label>
+  <label>Début <input type="datetime-local" name="startDate" required /></label>
+  <label>Fin <input type="datetime-local" name="endDate" required /></label>
+  <button type="submit">Créer</button>
+</form>
