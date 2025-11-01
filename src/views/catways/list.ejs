@@ -1,16 +1,59 @@
 <% layout('layout') -%>
-<h2>Catways</h2>
-<p><a class="btn" href="/catways/new">Créer un catway</a></p>
-<table>
-  <thead><tr><th>#</th><th>Type</th><th>État</th><th></th></tr></thead>
-  <tbody>
-    <% catways.forEach(c => { %>
-      <tr>
-        <td><%= c.catwayNumber %></td>
-        <td><%= c.catwayType %></td>
-        <td><%= c.catwayState %></td>
-        <td><a class="btn" href="/catways/<%= c.catwayNumber %>">Détails</a></td>
-      </tr>
-    <% }) %>
-  </tbody>
-</table>
+
+<section class="card">
+  <div class="card-header">
+    <h2>Catways</h2>
+    <a href="/catways/new" class="btn">+ Nouveau catway</a>
+  </div>
+
+  <% if (!catways || catways.length === 0) { %>
+    <p>Aucun catway en base. (As-tu importé <code>catways.json</code> ?)</p>
+  <% } else { %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Numéro</th>
+          <th>Type</th>
+          <th>État</th>
+          <th style="width:320px">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% catways.forEach(c => { %>
+          <tr>
+            <td><%= c.catwayNumber %></td>
+            <td><%= c.catwayType %></td>
+            <td><%= c.catwayState || '—' %></td>
+            <td class="actions" style="display:flex; gap:.5rem; align-items:center; flex-wrap:wrap;">
+              <a class="btn btn-sm" href="/catways/<%= c.catwayNumber %>">Détails</a>
+
+              <!-- Edit rapide de l'état -->
+              <form action="/catways/<%= c.catwayNumber %>/state" method="post" style="display:inline-flex; gap:.5rem; align-items:center">
+                <input type="text" name="catwayState" value="<%= c.catwayState || '' %>" placeholder="Nouvel état…" />
+                <button class="btn btn-sm" type="submit">Mettre à jour</button>
+              </form>
+
+              <!-- Suppression (avec confirmation JS) -->
+              <form class="js-delete-form" data-number="<%= c.catwayNumber %>" action="/catways/<%= c.catwayNumber %>/delete" method="post" style="display:inline-block">
+                <button class="btn btn-sm btn-danger" type="submit">Supprimer</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</section>
+
+<script>
+  // Confirmation avant suppression
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.js-delete-form').forEach(form => {
+      form.addEventListener('submit', (e) => {
+        const num = form.dataset.number || '';
+        const ok = confirm(`Voulez-vous vraiment supprimer le catway n°${num} ? Cette action est irréversible.`);
+        if (!ok) e.preventDefault();
+      });
+    });
+  });
+</script>

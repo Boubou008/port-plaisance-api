@@ -10,7 +10,10 @@
     "lint": "eslint .",
     "swagger": "node scripts/build-swagger.js",
     "seed:admin": "node scripts/create-admin.js",
-    "seed:import": "node scripts/importJson.js"
+    "seed:import": "node scripts/importJson.js",
+    "seed:catways": "node scripts/reimport-catways.js"
+
+
   },
   "keywords": [],
   "author": "",
